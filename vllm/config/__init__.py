@@ -43,7 +43,7 @@ from vllm.config.vllm import (
     set_current_vllm_config,
 )
 
-from vllm.config.hs_prune import HSPruneConfig
+from vllm.config.STEP import STEPConfig
 
 # __all__ should only contain classes and functions.
 # Types and globals should be imported from their respective modules.
@@ -102,6 +102,6 @@ __all__ = [
     "set_current_vllm_config",
     "get_layers_from_vllm_config",
 
-    # From vllm.config.hs_prune
-    "HSPruneConfig",
+    # From vllm.config.STEP
+    "STEPConfig",
 ]

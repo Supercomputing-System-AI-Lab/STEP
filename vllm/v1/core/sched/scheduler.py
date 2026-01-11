@@ -67,7 +67,7 @@ class Scheduler(SchedulerInterface):
         self.kv_cache_config = kv_cache_config
         self.kv_events_config = vllm_config.kv_events_config
         self.parallel_config = vllm_config.parallel_config
-        self.hs_prune_config = getattr(vllm_config, "hs_prune_config", None)
+        self.STEP_config = getattr(vllm_config, "STEP_config", None)
         self.log_stats = log_stats
         self.structured_output_manager = structured_output_manager
         self.is_encoder_decoder = vllm_config.model_config.is_encoder_decoder
@@ -127,8 +127,8 @@ class Scheduler(SchedulerInterface):
         self.requests: dict[str, Request] = {}
         # Scheduling policy
         requested_policy = self.scheduler_config.policy
-        if self.hs_prune_config is not None and self.hs_prune_config.enable:
-            requested_policy = SchedulingPolicy.HS_PRUNE.value
+        if self.STEP_config is not None and self.STEP_config.enable:
+            requested_policy = SchedulingPolicy.STEP.value
         try:
             self.policy = SchedulingPolicy(requested_policy)
         except ValueError as e:
@@ -229,7 +229,7 @@ class Scheduler(SchedulerInterface):
         # For logging.
         scheduled_timestamp = time.monotonic()
         # First, schedule the RUNNING requests.
-        if self.policy == SchedulingPolicy.HS_PRUNE:
+        if self.policy == SchedulingPolicy.STEP:
             self._order_running_by_score()
         req_index = 0
         while req_index < len(self.running) and token_budget > 0:
@@ -300,7 +300,7 @@ class Scheduler(SchedulerInterface):
                         # The request can be scheduled.
                         break
                     
-                    if self.policy == SchedulingPolicy.HS_PRUNE:
+                    if self.policy == SchedulingPolicy.STEP:
                         stopped_req = self._stop_lowest_running()
                         if stopped_req is None or stopped_req == request:
                             new_blocks = None
@@ -413,8 +413,6 @@ class Scheduler(SchedulerInterface):
 
         # Next, schedule the WAITING requests.
         if not preempted_reqs:
-            if self.policy == SchedulingPolicy.HS_PRUNE:
-                self._reorder_waiting_by_score()
             while self.waiting and token_budget > 0:
                 if len(self.running) == self.max_num_running_reqs:
                     break
@@ -785,7 +783,7 @@ class Scheduler(SchedulerInterface):
             )
         )
         logger.info(
-            "[HS_PRUNE] stopping request %s at tokens=%d, output_tokens=%d",
+            "[STEP] stopping request %s at tokens=%d, output_tokens=%d",
             victim.request_id,
             victim.num_tokens,
             victim.num_output_tokens,
@@ -793,52 +791,6 @@ class Scheduler(SchedulerInterface):
         self._free_request(victim)
         return victim
 
-    # prune according to ratio
-    # def _stop_lowest_running(self, current_index: int) -> list[Request]:
-    #     if not self.running:
-    #         return []
-
-    #     tail_count = len(self.running) - (current_index + 1)
-    #     if tail_count <= 0:
-    #         return []
-
-    #     # Remove roughly the lowest-scored 25% of the tail (at least 1).
-    #     num_to_stop = max(1, (tail_count + 3) // 4)
-    #     victims: list[Request] = []
-    #     for _ in range(num_to_stop):
-    #         victim = self.running.pop()
-    #         victim.stop_reason = "pruned"
-    #         victim.status = RequestStatus.FINISHED_ABORTED
-    #         score = victim.trace_avg_score
-    #         if score is None:
-    #             score = self.trace_scores.get(victim.request_id)
-
-    #         self.pending_pruned_outputs[victim.client_index].append(
-    #             EngineCoreOutput(
-    #                 request_id=victim.request_id,
-    #                 new_token_ids=[],
-    #                 finish_reason=RequestStatus.get_finished_reason(victim.status),
-    #                 stop_reason=victim.stop_reason,
-    #                 final_score=score,
-    #                 new_logprobs=None,
-    #                 new_prompt_logprobs_tensors=None,
-    #                 pooling_output=None,
-    #                 kv_transfer_params=None,
-    #                 trace_headers=victim.trace_headers,
-    #                 num_cached_tokens=victim.num_cached_tokens,
-    #                 num_nans_in_logits=victim.num_nans_in_logits,
-    #             )
-    #         )
-    #         logger.info(
-    #             "[HS_PRUNE] stopping request %s at tokens=%d, output_tokens=%d",
-    #             victim.request_id,
-    #             victim.num_tokens,
-    #             victim.num_output_tokens,
-    #         )
-    #         self._free_request(victim)
-    #         victims.append(victim)
-
-    #     return victims
     def _update_after_schedule(
         self,
         scheduler_output: SchedulerOutput,

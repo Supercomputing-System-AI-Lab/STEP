@@ -564,7 +564,7 @@ class GPUModelRunner(
 
         #hidden state classifier
         self.hiddenstate_classifier: HiddenstateClassifier | None = None
-        self.load_hiddenstate_classifier(model_path=self.vllm_config.hs_prune_config.classifier_path)
+        self.load_hiddenstate_classifier(model_path=self.vllm_config.STEP_config.classifier_path)
 
     def load_hiddenstate_classifier(self, model_path: str) -> None:
         model = HiddenstateClassifier(input_dim=self.hidden_size).to(self.device)
@@ -592,10 +592,10 @@ class GPUModelRunner(
                 for rid, t in hs.items()
             }
 
-    def enable_hidden_states_capture(self) -> None:        self.vllm_config.hs_prune_config.enable = True
+    def enable_hidden_states_capture(self) -> None:        self.vllm_config.STEP_config.enable = True
 
     def disable_hidden_states_capture(self) -> None:
-        self.vllm_config.hs_prune_config.enable = False
+        self.vllm_config.STEP_config.enable = False
         self._capture_hidden_states_next_forward.clear()
         self._last_hidden_states_by_req.clear()
 
@@ -604,7 +604,7 @@ class GPUModelRunner(
 
     def get_hidden_states_debug_info(self) -> dict[str, int]:
         return {
-            "enabled": int(self.vllm_config.hs_prune_config.enable),
+            "enabled": int(self.vllm_config.STEP_config.enable),
             "num_requests": len(self._last_hidden_states_by_req),
         }
 
@@ -2525,7 +2525,7 @@ class GPUModelRunner(
         # Capture hidden states for any requests flagged on the previous step.
         if (
             self._capture_hidden_states_next_forward
-            and self.vllm_config.hs_prune_config.enable
+            and self.vllm_config.STEP_config.enable
             and isinstance(hidden_states, torch.Tensor)
         ):
             cached: dict[str, torch.Tensor] = {}
@@ -2920,7 +2920,7 @@ class GPUModelRunner(
                 spec_decode_metadata,
             )
         
-        if self.vllm_config.hs_prune_config.enable and valid_sampled_token_ids:
+        if self.vllm_config.STEP_config.enable and valid_sampled_token_ids:
             trigger_req_ids = []
             for rid, idx in req_id_to_index_output_copy.items():
                 if idx >= len(valid_sampled_token_ids):
@@ -2929,7 +2929,7 @@ class GPUModelRunner(
                 if isinstance(tokens, torch.Tensor):
                     tokens = tokens.tolist()
                 if any(
-                    t in self.model.vllm_config.hs_prune_config.double_new_line_tokenID
+                    t in self.model.vllm_config.STEP_config.double_new_line_tokenID
                     for t in tokens
                 ):
                     trigger_req_ids.append(rid)

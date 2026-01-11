@@ -567,10 +567,10 @@ class EngineArgs:
     )
 
     # Hidden state pruning config
-    hs_prune_enable: bool = HSPruneConfig.enable
-    hs_prune_classifier_path: str | None = HSPruneConfig.classifier_path
-    hs_prune_stop_thinking_tokenID: int | None = HSPruneConfig.stop_thinking_tokenID
-    hs_prune_double_new_line_tokenID: list[int] | None = HSPruneConfig.double_new_line_tokenID
+    STEP_enable: bool = STEPConfig.enable
+    STEP_classifier_path: str | None = STEPConfig.classifier_path
+    STEP_stop_thinking_tokenID: int | None = STEPConfig.stop_thinking_tokenID
+    STEP_double_new_line_tokenID: list[int] | None = STEPConfig.double_new_line_tokenID
     
 
 
@@ -1692,10 +1692,10 @@ class EngineArgs:
             )
 
 
-        # HS pruning config
-        hs_prune_config = HSPruneConfig(
-            enable=self.hs_prune_enable,
-            classifier_path=self.hs_prune_classifier_path,
+        # STEP config
+        STEP_config = STEPConfig(
+            enable=self.STEP_enable,
+            classifier_path=self.STEP_classifier_path,
         )
 
         config = VllmConfig(
@@ -1714,7 +1714,7 @@ class EngineArgs:
             kv_events_config=self.kv_events_config,
             ec_transfer_config=self.ec_transfer_config,
             additional_config=self.additional_config,
-            hs_prune_config=hs_prune_config,
+            STEP_config=STEP_config,
         )
 
         return config

@@ -15,7 +15,7 @@ class SchedulingPolicy(Enum):
 
     FCFS = "fcfs"
     PRIORITY = "priority"
-    HS_PRUNE = "hs_prune"
+    STEP = "step"
 
 
 class RequestQueue(ABC):
@@ -216,7 +216,7 @@ def create_request_queue(policy: SchedulingPolicy) -> RequestQueue:
     """Create request queue based on scheduling policy."""
     if policy == SchedulingPolicy.PRIORITY:
         return PriorityRequestQueue()
-    elif policy in (SchedulingPolicy.FCFS, SchedulingPolicy.HS_PRUNE):
+    elif policy in (SchedulingPolicy.FCFS, SchedulingPolicy.STEP):
         return FCFSRequestQueue()
     else:
         raise ValueError(f"Unknown scheduling policy: {policy}")

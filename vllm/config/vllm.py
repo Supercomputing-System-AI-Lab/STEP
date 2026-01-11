@@ -40,7 +40,7 @@ from .scheduler import SchedulerConfig
 from .speculative import SpeculativeConfig
 from .structured_outputs import StructuredOutputsConfig
 from .utils import SupportsHash, config
-from .hs_prune import HSPruneConfig 
+from .STEP import STEPConfig 
 
 if TYPE_CHECKING:
     from transformers import PretrainedConfig
@@ -117,8 +117,8 @@ class VllmConfig:
     instance_id: str = ""
     """The ID of the vLLM instance."""
 
-    # HS Pruning config
-    hs_prune_config: HSPruneConfig | None = None
+    # STEP config
+    STEP_config: STEPConfig | None = None
 
     def compute_hash(self) -> str:
         """
@@ -206,9 +206,9 @@ class VllmConfig:
         else:
             vllm_factors.append("None")
         
-        # HS Prune config
-        if self.hs_prune_config:
-            vllm_factors.append(self.hs_prune_config.compute_hash())
+        # STEP config
+        if self.STEP_config:
+            vllm_factors.append(self.STEP_config.compute_hash())
 
         factors.append(vllm_factors)
 

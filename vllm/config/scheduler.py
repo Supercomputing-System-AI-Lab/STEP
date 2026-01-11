@@ -25,7 +25,7 @@ if TYPE_CHECKING:
 logger = init_logger(__name__)
 
 RunnerType = Literal["generate", "pooling", "draft"]
-SchedulerPolicy = Literal["fcfs", "priority", "hs_prune"]
+SchedulerPolicy = Literal["fcfs", "priority", "STEP"]
 
 
 @config
@@ -110,7 +110,7 @@ class SchedulerConfig:
     of arrival.\n
     - "priority" means requests are handled based on given priority (lower
     value means earlier handling) and time of arrival deciding any ties).\n
-    - "hs_prune" sorts active requests by score (higher-first) and prunes lower
+    - "STEP" sorts active requests by score (higher-first) and prunes lower
     scored ones when KV cache blocks are exhausted."""
 
     chunked_prefill_enabled: bool = Field(init=False)

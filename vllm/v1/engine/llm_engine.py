@@ -89,10 +89,10 @@ class LLMEngine:
         else:
             tokenizer = init_tokenizer_from_configs(self.model_config)
 
-        # hs_prune token IDs
-        from vllm.config.hs_prune import set_hs_prune_token_ids
-        if vllm_config.hs_prune_config.enable and tokenizer is not None:
-            set_hs_prune_token_ids(vllm_config.hs_prune_config, tokenizer)
+        # STEP token IDs
+        from vllm.config.STEP import set_STEP_token_ids
+        if vllm_config.STEP_config.enable and tokenizer is not None:
+            set_STEP_token_ids(vllm_config.STEP_config, tokenizer)
 
         self.processor = Processor(self.vllm_config, tokenizer)
         self.io_processor = get_io_processor(

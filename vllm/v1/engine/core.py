@@ -202,7 +202,7 @@ class EngineCore:
             self.step if self.batch_queue is None else self.step_with_batch_queue
         )
 
-        self.hs_prune_config = vllm_config.hs_prune_config
+        self.STEP_config = vllm_config.STEP_config
         # Tracking for trace scoring/pruning
         self.trace_scores: dict[str, list[float]] = {}
         self.final_trace_scores: dict[str, float | None] = {}
@@ -343,7 +343,7 @@ class EngineCore:
                 if model_output is None:
                     model_output = self.model_executor.sample_tokens(grammar_output) # sample 处理logit
         
-        if self.hs_prune_config.enable:
+        if self.STEP_config.enable:
             # 1) 对上一轮标记的 req，在本轮 forward 完成后读取/打分。
             if self.pending_hs_classification:
                 num_scheduled_tokens = {
@@ -391,7 +391,7 @@ class EngineCore:
                 total_tokens = self.trace_token_counts.get(rid, 0) + len(sampled)
                 self.trace_token_counts[rid] = total_tokens
                 if any(
-                    token_id in self.hs_prune_config.double_new_line_tokenID
+                    token_id in self.STEP_config.double_new_line_tokenID
                     for token_id in sampled
                 ):
                     trigger_req_ids.append(rid)
