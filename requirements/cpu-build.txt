@@ -1,0 +1,9 @@
+cmake>=3.26.1
+ninja
+packaging>=24.2
+setuptools>=77.0.3,<81.0.0
+setuptools-scm>=8
+scons; platform_machine == "aarch64"    # needed to build Arm Compute Library (ACL)
+wheel
+jinja2>=3.1.6
+regex

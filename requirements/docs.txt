@@ -1,0 +1,12 @@
+mkdocs
+mkdocs-api-autonav
+mkdocs-material
+mkdocstrings-python
+mkdocs-gen-files
+mkdocs-awesome-nav
+mkdocs-glightbox
+mkdocs-git-revision-date-localized-plugin
+mkdocs-minify-plugin
+regex
+ruff
+pydantic
