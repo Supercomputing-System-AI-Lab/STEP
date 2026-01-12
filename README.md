@@ -1,9 +1,7 @@
 ### STEP: Step-level Trace Evaluation and Pruning
 This is the official code implementation of paper: *Hidden States as Early Signals: Step-level Trace Evaluation and Pruning for Efficient Test-Time Scaling*
 
-STEP is a novel pruning framework that evaluates reasoning steps using hidden states and dynamically prunes unpromising traces during generation. 
-
-DeepConf is an efficient parallel thinking framework built upon popular LLM serving backends such as vLLM. It supports various types of reasoning tasks, including math, science, and coding. The package includes standard parallel thinking pipeline with different voting and aggregation strategies, as well as efficient techniques such as confidence-based early stopping.
+STEP is an efficient parallel thinking framework built upon vLLM, which evaluates reasoning steps using hidden states and dynamically prunes unpromising traces during generation. It supports various types of reasoning tasks, including math and science.
 
 ## Features
 - **Step-level trace scoring**: STEP trains a lightweight step-level scorer based on hidden states to estimate reasoning trace quality online.
