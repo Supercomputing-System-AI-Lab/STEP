@@ -59,7 +59,8 @@ python STEP/tests/benchmark_eval.py \
   --benchmark STEP/datasets/hmmt_2025.jsonl \
   --output-dir STEP/eval_result \
   --model-path deepseek-ai/DeepSeek-R1-0528-Qwen3-8B \
-  --STEP-step-scorer-path STEP/step_scorer/DeepSeek-R1-0528-Qwen3-8B_step_scorer.pt
+  --STEP-step-scorer-path STEP/step_scorer/DeepSeek-R1-0528-Qwen3-8B_step_scorer.pt \
+  --num-traces 32 \
 ```
 
 ## Citation 
