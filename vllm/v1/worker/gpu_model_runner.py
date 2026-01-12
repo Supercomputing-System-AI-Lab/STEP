@@ -564,7 +564,9 @@ class GPUModelRunner(
 
         #hidden state classifier
         self.hiddenstate_classifier: HiddenstateClassifier | None = None
-        self.load_hiddenstate_classifier(model_path=self.vllm_config.STEP_config.classifier_path)
+        self.load_hiddenstate_classifier(
+            model_path=self.vllm_config.STEP_config.step_scorer_path
+        )
 
     def load_hiddenstate_classifier(self, model_path: str) -> None:
         model = HiddenstateClassifier(input_dim=self.hidden_size).to(self.device)

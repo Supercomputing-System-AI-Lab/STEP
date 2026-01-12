@@ -236,9 +236,9 @@ def main():
         help="Path to the vLLM model weights.",
     )
     parser.add_argument(
-        "--STEP-classifier-path",
+        "--STEP-step-scorer-path",
         required=True,
-        help="Path to the hidden state pruning classifier checkpoint.",
+        help="Path to the step scorer checkpoint.",
     )
     parser.add_argument("--num-traces", type=int, default=64, help="Number of generations per question.")
     parser.add_argument("--max-tokens", type=int, default=60000, help="Maximum new tokens per generation.")
@@ -268,7 +268,7 @@ def main():
         tensor_parallel_size=1,
         gpu_memory_utilization=args.gpu_memory_utilization,
         STEP_enable=True,
-        STEP_classifier_path=args.classifier_path,
+        STEP_step_scorer_path=args.STEP_step_scorer_path,
         disable_log_stats=False,
     )
 

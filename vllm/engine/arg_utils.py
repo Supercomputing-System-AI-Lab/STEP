@@ -53,7 +53,7 @@ from vllm.config import (
     SpeculativeConfig,
     StructuredOutputsConfig,
     VllmConfig,
-    HSPruneConfig,
+    STEPConfig,
     get_attr_docs,
 )
 from vllm.config.cache import (
@@ -568,7 +568,7 @@ class EngineArgs:
 
     # Hidden state pruning config
     STEP_enable: bool = STEPConfig.enable
-    STEP_classifier_path: str | None = STEPConfig.classifier_path
+    STEP_step_scorer_path: str | None = STEPConfig.step_scorer_path
     STEP_stop_thinking_tokenID: int | None = STEPConfig.stop_thinking_tokenID
     STEP_double_new_line_tokenID: list[int] | None = STEPConfig.double_new_line_tokenID
     
@@ -1131,16 +1131,16 @@ class EngineArgs:
             "--structured-outputs-config", **vllm_kwargs["structured_outputs_config"]
         )
 
-        HSPrune_kwargs = get_kwargs(HSPruneConfig)
-        HSPrune_group = parser.add_argument_group(
-            title="HSPruneConfig",
-            description=HSPruneConfig.__doc__,
+        STEP_kwargs = get_kwargs(STEPConfig)
+        STEP_group = parser.add_argument_group(
+            title="STEPConfig",
+            description=STEPConfig.__doc__,
         )
-        HSPrune_group.add_argument(
-            "--HSPrune-enable", **HSPrune_kwargs["enable"]
+        STEP_group.add_argument(
+            "--STEP-enable", **STEP_kwargs["enable"]
         )
-        HSPrune_group.add_argument(
-            "--HSPrune-classifier-path", **HSPrune_kwargs["classifier_path"]
+        STEP_group.add_argument(
+            "--STEP-step-scorer-path", **STEP_kwargs["step_scorer_path"]
         )
 
 
@@ -1695,7 +1695,7 @@ class EngineArgs:
         # STEP config
         STEP_config = STEPConfig(
             enable=self.STEP_enable,
-            classifier_path=self.STEP_classifier_path,
+            step_scorer_path=self.STEP_step_scorer_path,
         )
 
         config = VllmConfig(
