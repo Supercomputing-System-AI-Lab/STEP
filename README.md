@@ -58,7 +58,7 @@ We provide a script at [benchmark_eval.py](STEP/tests/benchmark_eval.py) to eval
 python STEP/tests/benchmark_eval.py \
   --benchmark STEP/datasets/hmmt_2025.jsonl \
   --output-dir STEP/eval_result \
-  --model-path DeepSeek-R1-0528-Qwen3-8B \
+  --model-path deepseek-ai/DeepSeek-R1-0528-Qwen3-8B \
   --STEP-step-scorer-path STEP/step_scorer/Qwen3-4B_step_scorer.pt
 ```
 
