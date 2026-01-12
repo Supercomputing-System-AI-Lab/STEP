@@ -46,7 +46,7 @@ We currently provide step scorer for Qwen3-4B, DeepSeek-R1-0528-Qwen3-8B, Phi-4-
 
 
 ## Evaluation
-We provide a script at (benchmark_eval.py)[STEP/tests/benchmark_eval.py] to evaluate HMMT-25, HMMT-24, GPQA-Diamond, AIME. Here is an example to evaluate DeepSeek-R1-0528-Qwen3-8B on HMMT-25.
+We provide a script at [benchmark_eval.py](STEP/tests/benchmark_eval.py) to evaluate HMMT-25, HMMT-24, GPQA-Diamond, AIME. Here is an example to evaluate DeepSeek-R1-0528-Qwen3-8B on HMMT-25.
 ```bash
 python STEP/tests/benchmark_eval.py \
   --benchmark STEP/datasets/hmmt_2025.jsonl \
