@@ -50,6 +50,7 @@ llm = LLM(
 ```
 
 We currently provide step scorer for Qwen3-4B-Thinking-2507, DeepSeek-R1-0528-Qwen3-8B, Phi-4-reasoning-plus (14B) at folder [STEP/step_scorer_checkpoint](STEP/step_scorer_checkpoint). You can directly use them for inference.
+
 To train your custom scorer model, refer to [STEP/train_scorer](STEP/train_scorer).
 
 
