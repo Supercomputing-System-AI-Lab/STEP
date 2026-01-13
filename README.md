@@ -36,7 +36,7 @@ sampling_params = SamplingParams(
     temperature=0.6,
     top_p=0.95,
     top_k=20,
-    max_tokens=600000,
+    max_tokens=60000,
 )
 llm = LLM(
     model=model,
@@ -45,22 +45,22 @@ llm = LLM(
     STEP_enable=True,
     STEP_step_scorer_path=step_scorer_path,
     disable_log_stats=False,
-    )
+)
 
 ```
 
-We currently provide step scorer for Qwen3-4B, DeepSeek-R1-0528-Qwen3-8B, Phi-4-reasoning-plus (15B)
+We currently provide step scorer for Qwen3-4B-Thinking-2507, DeepSeek-R1-0528-Qwen3-8B, Phi-4-reasoning-plus (14B)
 
 
 ## Evaluation
-We provide a script at [benchmark_eval.py](STEP/tests/benchmark_eval.py) to evaluate HMMT-25, HMMT-24, GPQA-Diamond, AIME. Here is an example to evaluate DeepSeek-R1-0528-Qwen3-8B on HMMT-25.
+We provide a script at [benchmark_eval.py](STEP/tests/benchmark_eval.py) to evaluate AIME-25, HMMT-24, HMMT-25, GPQA-Diamond. Here is an example to evaluate DeepSeek-R1-0528-Qwen3-8B on HMMT-25.
 ```bash
 python STEP/tests/benchmark_eval.py \
   --benchmark STEP/datasets/hmmt_2025.jsonl \
   --output-dir STEP/eval_result \
   --model-path deepseek-ai/DeepSeek-R1-0528-Qwen3-8B \
   --STEP-step-scorer-path STEP/step_scorer/DeepSeek-R1-0528-Qwen3-8B_step_scorer.pt \
-  --num-traces 32 \
+  --num-traces 64 \
 ```
 
 ## Citation 
