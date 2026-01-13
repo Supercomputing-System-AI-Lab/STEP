@@ -3,6 +3,8 @@ This is the official code implementation of paper: *Hidden States as Early Signa
 
 STEP is an efficient parallel thinking framework built upon vLLM, which evaluates reasoning steps using hidden states and dynamically prunes unpromising traces during generation. It supports various types of reasoning tasks, including math and science.
 
+![](STEP/figures/main_figure.png)
+
 ## Features
 - **Step-level trace scoring**: STEP trains a lightweight step-level scorer based on hidden states to estimate reasoning trace quality online.
 - **Memory-aware pruning**: STEP prunes low-quality traces only when KV-cache saturates GPU memory, directly reducing waiting time and end-to-end latency.
