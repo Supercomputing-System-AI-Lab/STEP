@@ -1,4 +1,4 @@
-# STEP: Step-level Trace Evaluation and Pruning
+# STEP: Step-level Trace Evaluation and Pruning for Efficient Test-Time Scaling
 This is the official code implementation of paper: *Hidden States as Early Signals: Step-level Trace Evaluation and Pruning for Efficient Test-Time Scaling*
 
 STEP is an efficient parallel thinking framework built upon vLLM, which evaluates reasoning steps using hidden states and dynamically prunes unpromising traces during generation. It supports various types of reasoning tasks, including math and science.
