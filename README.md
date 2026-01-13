@@ -49,7 +49,8 @@ llm = LLM(
 
 ```
 
-We currently provide step scorer for Qwen3-4B-Thinking-2507, DeepSeek-R1-0528-Qwen3-8B, Phi-4-reasoning-plus (14B) at folder [STEP/step_scorer](STEP/step_scorer)
+We currently provide step scorer for Qwen3-4B-Thinking-2507, DeepSeek-R1-0528-Qwen3-8B, Phi-4-reasoning-plus (14B) at folder [STEP/step_scorer_checkpoint](STEP/step_scorer_checkpoint). You can directly use them for inference.
+To train your custom scorer model, refer to [STEP/train_scorer](STEP/train_scorer).
 
 
 ## Evaluation
@@ -59,10 +60,9 @@ python STEP/tests/benchmark_eval.py \
   --benchmark STEP/datasets/hmmt_2025.jsonl \
   --output-dir STEP/eval_result \
   --model-path deepseek-ai/DeepSeek-R1-0528-Qwen3-8B \
-  --STEP-step-scorer-path STEP/step_scorer/DeepSeek-R1-0528-Qwen3-8B_step_scorer.pt \
+  --STEP-step-scorer-path STEP/step_scorer_checkpoint/DeepSeek-R1-0528-Qwen3-8B_step_scorer.pt \
   --num-traces 64 \
 ```
 
 ## Citation 
-
 
