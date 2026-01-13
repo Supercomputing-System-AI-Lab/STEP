@@ -1,4 +1,4 @@
-### STEP: Step-level Trace Evaluation and Pruning
+# STEP: Step-level Trace Evaluation and Pruning
 This is the official code implementation of paper: *Hidden States as Early Signals: Step-level Trace Evaluation and Pruning for Efficient Test-Time Scaling*
 
 STEP is an efficient parallel thinking framework built upon vLLM, which evaluates reasoning steps using hidden states and dynamically prunes unpromising traces during generation. It supports various types of reasoning tasks, including math and science.
@@ -49,7 +49,7 @@ llm = LLM(
 
 ```
 
-We currently provide step scorer for Qwen3-4B-Thinking-2507, DeepSeek-R1-0528-Qwen3-8B, Phi-4-reasoning-plus (14B)
+We currently provide step scorer for Qwen3-4B-Thinking-2507, DeepSeek-R1-0528-Qwen3-8B, Phi-4-reasoning-plus (14B) at folder [STEP/step_scorer](STEP/step_scorer)
 
 
 ## Evaluation
