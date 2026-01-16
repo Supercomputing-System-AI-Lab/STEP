@@ -649,7 +649,7 @@ class Worker(WorkerBase):
         # GPUModelRunner 已经实现了 fetch_hidden_states/get_hidden_states_by_req
         return self.model_runner.fetch_hidden_states(req_ids, num_scheduled_tokens)
     
-    def classify_hidden_states(self, req_ids, num_scheduled_tokens):
+    def step_scorer_evaluate(self, req_ids, num_scheduled_tokens):
         return self.model_runner.step_scorer_evaluate(req_ids, num_scheduled_tokens)
 
     def check_health(self) -> None:
