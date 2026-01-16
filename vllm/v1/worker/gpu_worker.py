@@ -650,7 +650,7 @@ class Worker(WorkerBase):
         return self.model_runner.fetch_hidden_states(req_ids, num_scheduled_tokens)
     
     def classify_hidden_states(self, req_ids, num_scheduled_tokens):
-        return self.model_runner.classify_hidden_states(req_ids, num_scheduled_tokens)
+        return self.model_runner.step_scorer_evaluate(req_ids, num_scheduled_tokens)
 
     def check_health(self) -> None:
         # worker will always be healthy as long as it's running.

@@ -22,6 +22,13 @@ pip install -e . --no-build-isolation
 ```
 
 For a more detailed instruction, please refer to [vLLM v0.11.1 document](https://docs.vllm.ai/en/v0.11.1/). 
+
+## Code Structure
+We implement STEP based on vLLM-v1. Here is a summary of the modification.
+- STEP configuration can be referred at [vllm/config/STEP.py](vllm/config/STEP.py)
+- The hidden state capture and step scorer evaluation is implemented in worker process:[vllm/v1/worker/gpu_model_runner.py](vllm/v1/worker/gpu_model_runner.py)
+- The GPU-memory-aware pruning trigger of is implemented as `SchedulingPolicy.STEP` at [vllm/v1/core/sched/scheduler.py](vllm/v1/core/sched/scheduler.py) 
+
 ## Quick Start 
 
 ``` python

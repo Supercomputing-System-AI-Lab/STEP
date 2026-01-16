@@ -336,15 +336,15 @@ class EngineCore:
             scheduler_output = self.scheduler.schedule()
 
         with record_function_or_nullcontext("core step: execute_model"):
-            future = self.model_executor.execute_model(scheduler_output, non_block=True) # forward 在这里
+            future = self.model_executor.execute_model(scheduler_output, non_block=True) # forward 
             grammar_output = self.scheduler.get_grammar_bitmask(scheduler_output)
             with self.log_error_detail(scheduler_output):
                 model_output = future.result()
                 if model_output is None:
-                    model_output = self.model_executor.sample_tokens(grammar_output) # sample 处理logit
+                    model_output = self.model_executor.sample_tokens(grammar_output) # sample and process logit
         
         if self.STEP_config.enable:
-            # 1) 对上一轮标记的 req，在本轮 forward 完成后读取/打分。
+            # 1) For requests marked in the previous step, read/score after the current forward completes.
             if self.pending_hs_classification:
                 num_scheduled_tokens = {
                     rid: scheduler_output.num_scheduled_tokens[rid]
@@ -353,12 +353,12 @@ class EngineCore:
                 }
                 if num_scheduled_tokens:
                     scores_per_worker = self.collective_rpc(
-                        "classify_hidden_states",
+                        "step_scorer_evaluate",
                         args=(list(num_scheduled_tokens.keys()), num_scheduled_tokens),
                     )
                     scores = {
                         rid: s for d in scores_per_worker for rid, s in d.items()
-                    }  # 单机可以直接用 scores_per_worker[0]
+                    } 
 
                     for rid, score in scores.items():
                         buf = self.trace_scores.setdefault(rid, [])
@@ -373,18 +373,18 @@ class EngineCore:
                     trace_avg_scores = {
                         rid: (sum(buf) / len(buf))
                         for rid, buf in self.trace_scores.items()
-                        if buf  # 确保非空
+                        if buf 
                     }
                     if trace_avg_scores:
                         self.scheduler.update_trace_scores(trace_avg_scores)
 
-            # 已完成的请求不再需要等待分类。
+            # Finished requests no longer need to wait for classification.
             if self.scheduler.finished_req_ids:
                 self.pending_hs_classification.difference_update(
                     self.scheduler.finished_req_ids
                 )
 
-            # 2) 本轮生成的 token 如触发模式，登记到下一轮分类。
+            # 2) if a step boundary is detected, mark the req for classification in the next step.
             trigger_req_ids: list[str] = []
             for rid, idx in model_output.req_id_to_index.items():
                 sampled = model_output.sampled_token_ids[idx]
@@ -401,7 +401,7 @@ class EngineCore:
             
 
         with record_function_or_nullcontext("core step: update_from_output"):
-            engine_core_outputs = self.scheduler.update_from_output( #处理eos
+            engine_core_outputs = self.scheduler.update_from_output( #handle eos
                 scheduler_output,
                 model_output,
                 final_trace_scores=self.final_trace_scores,
@@ -435,8 +435,7 @@ class EngineCore:
             d = {}
             for req_id, t in item.items():
                 t_cpu = t.detach().cpu()
-                # 确保在 CPU 上再 tolist，避免 CUDA -> JSON
-                if t_cpu.ndim > 1:        # 多个 token 时压成 1D
+                if t_cpu.ndim > 1:       
                     t_cpu = t_cpu[-1]  
                 d[req_id] = t_cpu.view(-1).tolist()
             json_inputs.append(d)

@@ -563,12 +563,12 @@ class GPUModelRunner(
 
 
         #hidden state classifier
-        self.hiddenstate_classifier: HiddenstateClassifier | None = None
-        self.load_hiddenstate_classifier(
+        self.step_scorer: HiddenstateClassifier | None = None
+        self.load_step_scorer_checkpoint(
             model_path=self.vllm_config.STEP_config.step_scorer_path
         )
 
-    def load_hiddenstate_classifier(self, model_path: str) -> None:
+    def load_step_scorer_checkpoint(self, model_path: str) -> None:
         model = HiddenstateClassifier(input_dim=self.hidden_size).to(self.device)
         ckpt = torch.load(model_path, map_location=self.device)
         if isinstance(ckpt, dict) and "model_state_dict" in ckpt:
@@ -576,17 +576,17 @@ class GPUModelRunner(
         else:
             state_dict = ckpt
         model.load_state_dict(state_dict)
-        self.hiddenstate_classifier = model
-        self.hiddenstate_classifier.eval()
+        self.step_scorer = model
+        self.step_scorer.eval()
 
-    def classify_hidden_states(self, req_ids, num_scheduled_tokens):
+    def step_scorer_evaluate(self, req_ids, num_scheduled_tokens):
         hs = self.get_hidden_states_by_req(req_ids, num_scheduled_tokens)
-        if self.hiddenstate_classifier is None:
+        if self.step_scorer is None:
             raise RuntimeError("classifier not loaded")
         with torch.inference_mode():
             return {
                 rid: torch.sigmoid(
-                    self.hiddenstate_classifier(
+                    self.step_scorer(
                     t.to(device=self.device, dtype=torch.float32, non_blocking=True)
                     )
                 ).flatten()
@@ -594,7 +594,8 @@ class GPUModelRunner(
                 for rid, t in hs.items()
             }
 
-    def enable_hidden_states_capture(self) -> None:        self.vllm_config.STEP_config.enable = True
+    def enable_hidden_states_capture(self) -> None:        
+        self.vllm_config.STEP_config.enable = True
 
     def disable_hidden_states_capture(self) -> None:
         self.vllm_config.STEP_config.enable = False
