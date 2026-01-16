@@ -145,10 +145,13 @@ def run_single_question(
     generation_results = {}
     correct_traces = 0
     total_traces = len(request_output.outputs)
+    total_tokens = 0
 
     for j, output in enumerate(request_output.outputs):
         generated_text = output.text
         extracted_answer = extract_answer(generated_text)
+        token_count = len(output.token_ids)
+        total_tokens += token_count
         score = getattr(output, "final_score", None)
         is_trace_correct = (
             ground_truth is not None and extracted_answer is not None and equal_func(extracted_answer, ground_truth)
@@ -160,7 +163,7 @@ def run_single_question(
             weights_for_prompt.append(score)
 
         generation_results[f"generation_{j}"] = {
-            "token_length": len(output.token_ids),
+            "token_length": token_count,
             "generated_text": generated_text.strip(),
             "finish_reason": output.finish_reason,
             "stop_reason": output.stop_reason,
@@ -172,7 +175,7 @@ def run_single_question(
         }
 
         print(
-            f"question {question_index} output {j} token count: {len(output.token_ids)}, "
+            f"question {question_index} output {j} token count: {token_count}, "
             f"finish_reason={output.finish_reason}, stop_reason={output.stop_reason}, final_score={score}, "
             f"trace_correct={is_trace_correct}"
         )
@@ -210,6 +213,7 @@ def run_single_question(
         "total_traces": total_traces,
         "correct_trace_ratio": correct_traces / total_traces if total_traces else 0.0,
         "generation_time": generation_time,
+        "total_tokens": total_tokens,
     }
 
 
@@ -291,6 +295,9 @@ def main():
     total_generation_time = time() - total_start
 
     total_questions = len(summary_entries)
+    avg_tokens_per_problem = (
+        sum(entry["total_tokens"] for entry in summary_entries) / total_questions if total_questions else 0.0
+    )
     final_accuracy = (
         sum(1 for entry in summary_entries if entry["is_final_correct"]) / total_questions if total_questions else 0.0
     )
@@ -301,7 +308,9 @@ def main():
         "num_questions": total_questions,
         "num_traces_per_question": args.num_traces,
         "total_generation_time": total_generation_time,
+        "generation_time_per_question": total_generation_time / total_questions if total_questions else 0.0,
         "final_accuracy": final_accuracy,
+        "avg_tokens_per_problem": avg_tokens_per_problem,
         "questions": summary_entries,
     }
 
@@ -311,7 +320,9 @@ def main():
 
     print(f"Saved per-question outputs to {output_dir}")
     print(f"Total generation time: {total_generation_time}")
+    print(f"Generation time per question: {total_generation_time / total_questions if total_questions else 0.0}")
     print(f"Final benchmark accuracy: {final_accuracy}")
+    print(f"Avg tokens per problem: {avg_tokens_per_problem}")
 
 
 if __name__ == "__main__":
