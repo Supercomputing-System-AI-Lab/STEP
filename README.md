@@ -75,4 +75,14 @@ python STEP/tests/benchmark_eval.py \
 ```
 
 ## Citation 
-
+```
+@misc{liang2026hiddenstatesearlysignals,
+      title={Hidden States as Early Signals: Step-level Trace Evaluation and Pruning for Efficient Test-Time Scaling}, 
+      author={Zhixiang Liang and Beichen Huang and Zheng Wang and Minjia Zhang},
+      year={2026},
+      eprint={2601.09093},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG},
+      url={https://arxiv.org/abs/2601.09093}, 
+}
+```
