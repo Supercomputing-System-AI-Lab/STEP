@@ -73,6 +73,7 @@ python STEP/tests/benchmark_eval.py \
   --STEP-step-scorer-path STEP/step_scorer_checkpoint/DeepSeek-R1-0528-Qwen3-8B_step_scorer.pt \
   --num-traces 64 \
 ```
+For each evaluation result in the paper, each configuration is run four times for both our method and all baseline methods, and the results are averaged.
 
 ## Citation 
 ```
