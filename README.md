@@ -17,12 +17,17 @@ STEP is an efficient parallel thinking framework built upon vLLM, which evaluate
 ## Install 
 This repo is built based on vLLM 0.11.1. Here is a short instruction of installing STEP.
 
+> ⚠️ **Warning**  
+> Installing and compiling **vLLM** may take a **significant amount of time** depending on your system configuration (e.g., GPU architecture, CUDA version, compiler).  
+> In some cases, the compilation process can take **several hours**. Please plan accordingly.
+
 ```bash
 # Install the official vLLM wheel once to pull in the correct PyTorch and CUDA dependencies.
 uv pip install vllm --torch-backend=auto
 # Install STEP in editable mode.
 pip install -e . --no-build-isolation
 ```
+
 
 For a more detailed instruction, please refer to [vLLM v0.11.1 document](https://docs.vllm.ai/en/v0.11.1/). 
 
