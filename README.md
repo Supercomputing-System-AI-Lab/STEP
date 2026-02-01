@@ -81,7 +81,7 @@ python STEP/tests/benchmark_eval.py \
   --STEP-step-scorer-path STEP/step_scorer_checkpoint/DeepSeek-R1-0528-Qwen3-8B_step_scorer.pt \
   --num-traces 64 \
 ```
-For each evaluation result in the paper, each configuration is run four times for both our method and all baseline methods, and the results are averaged.
+For each evaluation result in the paper, each configuration is run four times for both our method and all baseline methods, and the results are averaged. In HMMT-24 and HMMT-25, the answers to 1–2 questions may not be correctly evaluated by the rule-based verifier when compared with the ground truth. Please double-check the output files and manually verify these cases.
 
 ## Citation 
 ```
