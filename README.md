@@ -1,4 +1,4 @@
-# STEP: Step-level Trace Evaluation and Pruning for Efficient Test-Time Scaling
+# STEP: Step-level Trace Evaluation and Pruning for Efficient Test-Time Scaling [ACL'26 Findings]
 [![arXiv](https://img.shields.io/badge/arXiv-2601.09093-b31b1b.svg)](https://arxiv.org/abs/2601.09093)
 
 This is the official code implementation of the paper:  *Hidden States as Early Signals: Step-level Trace Evaluation and Pruning for Efficient Test-Time Scaling*.
